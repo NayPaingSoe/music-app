@@ -1,0 +1,100 @@
+import { useState, useEffect } from 'react';
+import { Heart, MoreHorizontal, Music } from 'lucide-react';
+import { getRecommendedArtists, getArtistAlbums, getAlbumTracks } from '@/services/audioDb';
+
+export default function RecentlyPlayed() {
+  const [tracks, setTracks] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchRecentTracks = async () => {
+      try {
+        // Get some artists and their tracks
+        const artists = await getRecommendedArtists();
+        const tracksData = [];
+
+        // Get albums and tracks for first few artists
+        for (let i = 0; i < Math.min(4, artists.length); i++) {
+          const albums = await getArtistAlbums(artists[i].idArtist);
+          if (albums.length > 0) {
+            const albumTracks = await getAlbumTracks(albums[0].idAlbum);
+            if (albumTracks.length > 0) {
+              tracksData.push({
+                id: albumTracks[0].idTrack,
+                name: albumTracks[0].strTrack,
+                artist: artists[i].strArtist,
+                duration: albumTracks[0].intDuration ? 
+                  `${Math.floor(albumTracks[0].intDuration / 60000)}:${String(Math.floor((albumTracks[0].intDuration % 60000) / 1000)).padStart(2, '0')}` : 
+                  '3:45',
+                albumArt: albums[0].strAlbumThumb || artists[i].strArtistThumb,
+              });
+            }
+          }
+        }
+
+        setTracks(tracksData);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching tracks:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchRecentTracks();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold text-white mb-4">Recently Played</h2>
+        <div className="space-y-2">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="h-16 bg-white/5 rounded-lg animate-pulse"></div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mb-8">
+      <h2 className="text-2xl font-bold text-white mb-4">Recently Played</h2>
+      <div className="space-y-2">
+        {tracks.map((track) => (
+          <div
+            key={track.id}
+            className="flex items-center gap-4 p-3 rounded-lg hover:bg-white/5 transition-colors group cursor-pointer"
+          >
+            {/* Album Art */}
+            <div className="w-12 h-12 rounded bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center overflow-hidden flex-shrink-0">
+              {track.albumArt ? (
+                <img src={track.albumArt} alt={track.name} className="w-full h-full object-cover" />
+              ) : (
+                <Music className="w-6 h-6 text-gray-400" />
+              )}
+            </div>
+
+            {/* Track Info */}
+            <div className="flex-1 min-w-0">
+              <p className="text-white font-medium text-sm truncate">{track.name}</p>
+              <p className="text-gray-400 text-xs truncate">{track.artist}</p>
+            </div>
+
+            {/* Duration */}
+            <div className="text-gray-400 text-sm">{track.duration}</div>
+
+            {/* Actions */}
+            <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+              <button className="w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center transition-colors">
+                <Heart className="w-4 h-4 text-gray-400 hover:text-pink-500" />
+              </button>
+              <button className="w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center transition-colors">
+                <MoreHorizontal className="w-4 h-4 text-gray-400" />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
