@@ -1,10 +1,10 @@
-import { Play } from 'lucide-react';
+import { Play } from "lucide-react";
 
 export default function HeroSection() {
   return (
     <div className="grid grid-cols-2 gap-6 mb-8">
       {/* GET LOST Card */}
-      <div className="relative h-52 rounded-2xl gradient-pink overflow-hidden group cursor-pointer">
+      <div className="relative h-52 rounded-2xl gradient-pink overflow-hidden group cursor-pointer transition-all duration-20 hover:scale-105 hover:shadow-2xl">
         <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
         <div className="relative h-full p-8 flex flex-col justify-between">
           <div>
@@ -18,7 +18,7 @@ export default function HeroSection() {
       </div>
 
       {/* MELLOW Card */}
-      <div className="relative h-52 rounded-2xl gradient-blue overflow-hidden group cursor-pointer">
+      <div className="relative h-52 rounded-2xl gradient-blue overflow-hidden group cursor-pointer transition-all duration-20 hover:scale-105 hover:shadow-2xl">
         <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
         <div className="relative h-full p-8 flex flex-col justify-between">
           <div>
