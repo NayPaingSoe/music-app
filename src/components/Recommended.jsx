@@ -1,10 +1,18 @@
-import { useState, useEffect } from 'react';
-import { Play, Music } from 'lucide-react';
-import { getRecommendedArtists, getArtistAlbums } from '@/services/audioDb';
+import { useState, useEffect } from "react";
+import { Play, Music } from "lucide-react";
+import { getRecommendedArtists, getArtistAlbums } from "@/services/audioDb";
+import { usePlayer } from "@/context/PlayerContext.jsx";
+
+const SAMPLE_AUDIO_URLS = [
+  "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3",
+  "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3",
+  "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3",
+];
 
 export default function Recommended() {
   const [albums, setAlbums] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { playTrack, currentTrack } = usePlayer();
 
   useEffect(() => {
     const fetchRecommendations = async () => {
@@ -13,7 +21,8 @@ export default function Recommended() {
         const albumsData = [];
 
         // Get first album from each artist
-        for (const artist of artists.slice(0, 3)) {
+        for (let i = 0; i < Math.min(3, artists.length); i++) {
+          const artist = artists[i];
           const artistAlbums = await getArtistAlbums(artist.idArtist);
           if (artistAlbums.length > 0) {
             albumsData.push({
@@ -21,6 +30,7 @@ export default function Recommended() {
               name: artistAlbums[0].strAlbum,
               artist: artist.strArtist,
               cover: artistAlbums[0].strAlbumThumb || artist.strArtistThumb,
+              url: SAMPLE_AUDIO_URLS[i % SAMPLE_AUDIO_URLS.length],
             });
           }
         }
@@ -28,7 +38,7 @@ export default function Recommended() {
         setAlbums(albumsData);
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching recommendations:', error);
+        console.error("Error fetching recommendations:", error);
         setLoading(false);
       }
     };
@@ -39,10 +49,15 @@ export default function Recommended() {
   if (loading) {
     return (
       <div>
-        <h2 className="text-2xl font-bold text-foreground mb-4">Recommended For You</h2>
+        <h2 className="text-2xl font-bold text-foreground mb-4">
+          Recommended For You
+        </h2>
         <div className="grid grid-cols-3 gap-6">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="aspect-square bg-gray-200 rounded-lg animate-pulse"></div>
+            <div
+              key={i}
+              className="aspect-square bg-gray-200 rounded-lg animate-pulse"
+            ></div>
           ))}
         </div>
       </div>
@@ -51,12 +66,25 @@ export default function Recommended() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-foreground mb-4">Recommended For You</h2>
+      <h2 className="text-2xl font-bold text-foreground mb-4">
+        Recommended For You
+      </h2>
       <div className="grid grid-cols-3 gap-6">
         {albums.map((album) => (
           <div
             key={album.id}
-            className="group cursor-pointer"
+            className={`group cursor-pointer ${
+              currentTrack.id === album.id ? "opacity-100" : "opacity-90"
+            }`}
+            onClick={() =>
+              playTrack({
+                id: album.id,
+                name: album.name,
+                artist: album.artist,
+                albumArt: album.cover,
+                url: album.url,
+              })
+            }
           >
             {/* Album Cover */}
             <div className="relative aspect-square rounded-lg overflow-hidden mb-3 bg-gradient-to-br from-gray-200 to-gray-300">
@@ -71,7 +99,7 @@ export default function Recommended() {
                   <Music className="w-16 h-16 text-muted-foreground" />
                 </div>
               )}
-              
+
               {/* Play Button Overlay */}
               <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                 <button className="w-14 h-14 rounded-full bg-pink-500 hover:bg-pink-600 hover:scale-110 flex items-center justify-center transition-all duration-300 shadow-2xl">
@@ -85,7 +113,9 @@ export default function Recommended() {
               <h3 className="text-foreground font-medium text-sm mb-1 truncate group-hover:text-pink-500 transition-colors">
                 {album.name}
               </h3>
-              <p className="text-muted-foreground text-xs truncate">{album.artist}</p>
+              <p className="text-muted-foreground text-xs truncate">
+                {album.artist}
+              </p>
             </div>
           </div>
         ))}

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useMemo } from "react";
 import {
   Play,
   Pause,
@@ -11,23 +11,19 @@ import {
   ListMusic,
   Mic2,
 } from "lucide-react";
-
-const SAMPLE_TRACK_URL =
-  "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
+import { usePlayer } from "@/context/PlayerContext.jsx";
 
 export default function Player() {
-  const audioRef = useRef(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [duration, setDuration] = useState(0);
-  const [volume, setVolume] = useState(70);
-
-  const currentTrack = {
-    name: "Mind-Blowing Beats",
-    artist: "Various Artists",
-    albumArt: null,
-    url: SAMPLE_TRACK_URL,
-  };
+  const {
+    currentTrack,
+    isPlaying,
+    progress,
+    duration,
+    volume,
+    setVolume,
+    togglePlay,
+    seekToPercent,
+  } = usePlayer();
 
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
@@ -35,53 +31,27 @@ export default function Player() {
     return `${mins}:${String(secs).padStart(2, "0")}`;
   };
 
-  useEffect(() => {
-    const audio = new Audio(currentTrack.url);
-    audio.loop = true;
-    audio.volume = volume / 100;
-    audioRef.current = audio;
-
-    const handleTimeUpdate = () => {
-      if (!audio.duration) return;
-      setProgress((audio.currentTime / audio.duration) * 100);
-    };
-
-    const handleLoadedMetadata = () => {
-      setDuration(Math.floor(audio.duration));
-    };
-
-    audio.addEventListener("timeupdate", handleTimeUpdate);
-    audio.addEventListener("loadedmetadata", handleLoadedMetadata);
-
-    return () => {
-      audio.pause();
-      audio.removeEventListener("timeupdate", handleTimeUpdate);
-      audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
-    };
-  }, [currentTrack.url, volume]);
-
-  useEffect(() => {
-    if (!audioRef.current) return;
-    audioRef.current.volume = volume / 100;
-  }, [volume]);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    if (isPlaying) {
-      audio.play();
-    } else {
-      audio.pause();
-    }
-  }, [isPlaying]);
+  const currentPosition = useMemo(() => {
+    if (!duration) return 0;
+    return Math.floor((progress / 100) * duration);
+  }, [progress, duration]);
 
   const handleProgressClick = (event) => {
-    if (!audioRef.current || !duration) return;
+    if (!duration) return;
     const rect = event.currentTarget.getBoundingClientRect();
     const clickPosition = event.clientX - rect.left;
     const newProgress = (clickPosition / rect.width) * 100;
-    audioRef.current.currentTime = (newProgress / 100) * duration;
-    setProgress(newProgress);
+    seekToPercent(newProgress);
+  };
+
+  const handleVolumeClick = (event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const clickPosition = event.clientX - rect.left;
+    const newVolume = Math.max(
+      0,
+      Math.min((clickPosition / rect.width) * 100, 100)
+    );
+    setVolume(newVolume);
   };
 
   return (
@@ -120,7 +90,7 @@ export default function Player() {
               <SkipBack className="w-5 h-5 text-white fill-white" />
             </button>
             <button
-              onClick={() => setIsPlaying(!isPlaying)}
+              onClick={togglePlay}
               className="w-10 h-10 rounded-full bg-white hover:bg-white/90 hover:scale-105 flex items-center justify-center transition-all"
             >
               {isPlaying ? (
@@ -140,7 +110,7 @@ export default function Player() {
           {/* Progress Bar */}
           <div className="flex items-center gap-3">
             <span className="text-white/60 text-xs font-medium min-w-[35px]">
-              {formatTime(Math.floor(progress * 2.4))}
+              {formatTime(currentPosition)}
             </span>
             <div
               className="flex-1 h-1 bg-white/20 rounded-full overflow-hidden group cursor-pointer"
@@ -167,7 +137,10 @@ export default function Player() {
           </button>
           <div className="flex items-center gap-2">
             <Volume2 className="w-4 h-4 text-white/70" />
-            <div className="w-24 h-1 bg-white/20 rounded-full overflow-hidden group cursor-pointer">
+            <div
+              className="w-24 h-1 bg-white/20 rounded-full overflow-hidden group cursor-pointer"
+              onClick={handleVolumeClick}
+            >
               <div
                 className="h-full bg-white rounded-full transition-all group-hover:bg-pink-400"
                 style={{ width: `${volume}%` }}
