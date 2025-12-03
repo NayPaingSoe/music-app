@@ -1,19 +1,26 @@
-import { Home, Music, ListMusic, Sparkles, TrendingUp, Plus } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import {
+  Home,
+  Music,
+  ListMusic,
+  Sparkles,
+  TrendingUp,
+  Plus,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const menuItems = [
-  { icon: Home, label: 'Home', active: true },
-  { icon: Music, label: 'Songs', active: false },
-  { icon: ListMusic, label: 'Playlists', active: false },
-  { icon: Sparkles, label: 'Just for You', active: false },
-  { icon: TrendingUp, label: 'Top Charts', active: false },
+  { icon: Home, label: "Home", active: true },
+  { icon: Music, label: "Songs", active: false },
+  { icon: ListMusic, label: "Playlists", active: false },
+  { icon: Sparkles, label: "Just for You", active: false },
+  { icon: TrendingUp, label: "Top Charts", active: false },
 ];
 
 const playlists = [
-  'Workout Mix',
+  "Workout Mix",
   "Chillin' at Home",
-  'Booping at Adobe',
-  'XD 4 Life',
+  "Booping at Adobe",
+  "XD 4 Life",
 ];
 
 export default function Sidebar() {
@@ -41,10 +48,10 @@ export default function Sidebar() {
               <button
                 key={item.label}
                 className={cn(
-                  'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
+                  "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors",
                   item.active
-                    ? 'bg-secondary text-foreground font-bold border-l-4 border-pink-500'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
+                    ? "bg-secondary text-foreground font-bold text-pink-500"
+                    : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
                 )}
               >
                 <item.icon className="w-5 h-5" />
