@@ -39,10 +39,10 @@ export default function Recommended() {
   if (loading) {
     return (
       <div>
-        <h2 className="text-2xl font-bold text-white mb-4">Recommended For You</h2>
+        <h2 className="text-2xl font-bold text-foreground mb-4">Recommended For You</h2>
         <div className="grid grid-cols-3 gap-6">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="aspect-square bg-white/5 rounded-lg animate-pulse"></div>
+            <div key={i} className="aspect-square bg-secondary rounded-lg animate-pulse"></div>
           ))}
         </div>
       </div>
@@ -51,7 +51,7 @@ export default function Recommended() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-white mb-4">Recommended For You</h2>
+      <h2 className="text-2xl font-bold text-foreground mb-4">Recommended For You</h2>
       <div className="grid grid-cols-3 gap-6">
         {albums.map((album) => (
           <div
@@ -59,7 +59,7 @@ export default function Recommended() {
             className="group cursor-pointer"
           >
             {/* Album Cover */}
-            <div className="relative aspect-square rounded-lg overflow-hidden mb-3 bg-gradient-to-br from-gray-700 to-gray-800">
+            <div className="relative aspect-square rounded-lg overflow-hidden mb-3 bg-gradient-to-br from-gray-200 to-gray-300">
               {album.cover ? (
                 <img
                   src={album.cover}
@@ -68,12 +68,12 @@ export default function Recommended() {
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
-                  <Music className="w-16 h-16 text-gray-500" />
+                  <Music className="w-16 h-16 text-muted-foreground" />
                 </div>
               )}
               
               {/* Play Button Overlay */}
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                 <button className="w-14 h-14 rounded-full bg-pink-500 hover:bg-pink-600 hover:scale-110 flex items-center justify-center transition-all duration-300 shadow-2xl">
                   <Play className="w-6 h-6 text-white fill-white ml-1" />
                 </button>
@@ -82,10 +82,10 @@ export default function Recommended() {
 
             {/* Album Info */}
             <div>
-              <h3 className="text-white font-medium text-sm mb-1 truncate group-hover:text-pink-400 transition-colors">
+              <h3 className="text-foreground font-medium text-sm mb-1 truncate group-hover:text-pink-500 transition-colors">
                 {album.name}
               </h3>
-              <p className="text-gray-400 text-xs truncate">{album.artist}</p>
+              <p className="text-muted-foreground text-xs truncate">{album.artist}</p>
             </div>
           </div>
         ))}
