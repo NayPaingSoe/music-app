@@ -23,11 +23,13 @@ function App() {
               {/* Hero Section */}
               <HeroSection />
 
-              {/* Recently Played */}
-              <RecentlyPlayed />
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                {/* Recently Played */}
+                <RecentlyPlayed />
 
-              {/* Recommended */}
-              <Recommended />
+                {/* Recommended */}
+                <Recommended />
+              </div>
             </div>
           </div>
         </div>
