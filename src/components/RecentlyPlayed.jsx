@@ -49,7 +49,7 @@ export default function RecentlyPlayed() {
         <h2 className="text-2xl font-bold text-foreground mb-4">Recently Played</h2>
         <div className="space-y-2">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="h-16 bg-secondary rounded-lg animate-pulse"></div>
+            <div key={i} className="h-16 bg-gray-200 rounded-lg animate-pulse"></div>
           ))}
         </div>
       </div>
