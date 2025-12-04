@@ -11,6 +11,7 @@ import {
   ListMusic,
   Mic2,
 } from "lucide-react";
+import { MotionWrapper } from "@/components/MotionWrapper";
 import { usePlayer } from "@/context/PlayerContext.jsx";
 
 export default function Player() {
@@ -55,7 +56,7 @@ export default function Player() {
   };
 
   return (
-    <div className="h-24 bg-gradient-to-r from-pink-700 via-pink-600 to-pink-500 border-t border-white/5 shadow-[0_-10px_35px_rgba(0,0,0,0.25)]">
+    <MotionWrapper className="h-24 bg-linear-to-r from-pink-700 via-pink-600 to-pink-500 border-t border-white/5 shadow-[0_-10px_35px_rgba(0,0,0,0.25)]">
       <div className="h-full px-6 flex items-center gap-6 text-white">
         {/* Current Track Info */}
         <div className="flex items-center gap-3 w-56">
@@ -147,6 +148,6 @@ export default function Player() {
           </div>
         </div>
       </div>
-    </div>
+    </MotionWrapper>
   );
 }

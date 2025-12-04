@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Play, Music } from "lucide-react";
+import { MotionWrapper } from "@/components/MotionWrapper";
 import { getRecommendedArtists, getArtistAlbums } from "@/services/audioDb";
 import { usePlayer } from "@/context/PlayerContext.jsx";
 
@@ -48,7 +49,7 @@ export default function Recommended() {
 
   if (loading) {
     return (
-      <div>
+      <MotionWrapper>
         <h2 className="text-2xl font-bold text-foreground mb-4">
           Recommended For You
         </h2>
@@ -60,12 +61,12 @@ export default function Recommended() {
             ></div>
           ))}
         </div>
-      </div>
+      </MotionWrapper>
     );
   }
 
   return (
-    <div>
+    <MotionWrapper>
       <h2 className="text-2xl font-bold text-foreground mb-4">
         Recommended For You
       </h2>
@@ -87,7 +88,7 @@ export default function Recommended() {
             }
           >
             {/* Album Cover */}
-            <div className="relative aspect-square rounded-lg overflow-hidden mb-3 bg-gradient-to-br from-gray-200 to-gray-300">
+            <div className="relative aspect-square rounded-lg overflow-hidden mb-3 bg-linear-to-br from-gray-200 to-gray-300">
               {album.cover ? (
                 <img
                   src={album.cover}
@@ -120,6 +121,6 @@ export default function Recommended() {
           </div>
         ))}
       </div>
-    </div>
+    </MotionWrapper>
   );
 }

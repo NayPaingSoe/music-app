@@ -1,9 +1,10 @@
-import { Search, Bell } from 'lucide-react';
-import { Input } from '@/components/ui/input';
+import { Search, Bell } from "lucide-react";
+import { MotionWrapper } from "@/components/MotionWrapper";
+import { Input } from "@/components/ui/input";
 
 export default function Header() {
   return (
-    <div className="h-16 bg-background/80 backdrop-blur-xl border-b border-border flex items-center justify-between px-8">
+    <MotionWrapper className="h-16 bg-background/80 backdrop-blur-xl border-b border-border flex items-center justify-between px-8">
       {/* Search Bar */}
       <div className="flex-1 max-w-md relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -21,6 +22,6 @@ export default function Header() {
         </button>
         <span className="absolute top-1 right-1 w-2 h-2 bg-pink-500 rounded-full"></span>
       </div>
-    </div>
+    </MotionWrapper>
   );
 }

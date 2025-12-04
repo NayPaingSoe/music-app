@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Heart, MoreHorizontal, Music } from "lucide-react";
+import { MotionWrapper } from "@/components/MotionWrapper";
 import {
   getRecommendedArtists,
   getArtistAlbums,
@@ -61,7 +62,7 @@ export default function RecentlyPlayed() {
 
   if (loading) {
     return (
-      <div className="mb-8">
+      <MotionWrapper className="mb-8">
         <h2 className="text-2xl font-bold text-foreground mb-4">
           Recently Played
         </h2>
@@ -73,12 +74,12 @@ export default function RecentlyPlayed() {
             ></div>
           ))}
         </div>
-      </div>
+      </MotionWrapper>
     );
   }
 
   return (
-    <div className="mb-8">
+    <MotionWrapper className="mb-8">
       <h2 className="text-2xl font-bold text-foreground mb-4">
         Recently Played
       </h2>
@@ -131,6 +132,6 @@ export default function RecentlyPlayed() {
           </div>
         ))}
       </div>
-    </div>
+    </MotionWrapper>
   );
 }

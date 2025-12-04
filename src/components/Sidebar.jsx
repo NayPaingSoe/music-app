@@ -6,6 +6,7 @@ import {
   TrendingUp,
   Plus,
 } from "lucide-react";
+import { MotionWrapper } from "@/components/MotionWrapper";
 import { cn } from "@/lib/utils";
 
 const menuItems = [
@@ -25,7 +26,7 @@ const playlists = [
 
 export default function Sidebar() {
   return (
-    <div className="w-64 bg-card h-screen flex flex-col border-r border-border">
+    <MotionWrapper className="w-64 bg-card h-screen flex flex-col border-r border-border">
       {/* User Profile */}
       <div className="p-6 flex items-center gap-3 border-b border-border">
         <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center text-white font-semibold">
@@ -84,6 +85,6 @@ export default function Sidebar() {
           </nav>
         </div>
       </div>
-    </div>
+    </MotionWrapper>
   );
 }
