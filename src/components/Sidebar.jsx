@@ -5,6 +5,7 @@ import {
   Sparkles,
   TrendingUp,
   Plus,
+  X,
 } from "lucide-react";
 import { MotionWrapper } from "@/components/MotionWrapper";
 import { cn } from "@/lib/utils";
@@ -24,9 +25,35 @@ const playlists = [
   "XD 4 Life",
 ];
 
-export default function Sidebar() {
+export default function Sidebar({ isMobile = false, isOpen = false, onClose }) {
+  const wrapperClasses = cn(
+    "w-64 flex flex-col border-r border-border",
+    isMobile
+      ? cn(
+          "fixed inset-y-0 left-0 z-50 shadow-2xl transform transition-transform duration-300 lg:hidden bg-white",
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        )
+      : "hidden lg:flex min-h-full bg-card"
+  );
+
   return (
-    <MotionWrapper className="w-64 bg-card h-screen flex flex-col border-r border-border">
+    <MotionWrapper className={wrapperClasses}>
+      {isMobile && (
+        <div className="flex items-center justify-between p-4 border-b border-border">
+          <div>
+            <p className="text-foreground font-medium text-sm">Menu</p>
+            <p className="text-muted-foreground text-xs">Navigate your tunes</p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="w-10 h-10 rounded-full bg-secondary hover:bg-secondary/80 flex items-center justify-center transition-colors"
+            aria-label="Close sidebar"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+      )}
       {/* User Profile */}
       <div className="p-6 flex items-center gap-3 border-b border-border">
         <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center text-white font-semibold">
